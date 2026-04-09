@@ -20,6 +20,7 @@ class DocumentCameraMessages {
   final String documentOverflows;
   final String perfectHoldStill;
   final String adjustDocumentPosition;
+  final String andConnector;
   
   final String cameraError;
 
@@ -41,6 +42,7 @@ class DocumentCameraMessages {
     this.documentOverflows = 'Document overflows top and bottom',
     this.perfectHoldStill = 'Perfect! Hold still to capture.',
     this.adjustDocumentPosition = 'Adjust document position',
+    this.andConnector = ' and ',
     this.cameraError = 'Camera error',
   });
 }
