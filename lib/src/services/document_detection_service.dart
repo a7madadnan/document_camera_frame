@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_object_detection/google_mlkit_object_detection.dart';
 
 import 'image_converter_service.dart';
+import '../core/document_camera_messages.dart';
 
 /// Service responsible for detecting documents in a live camera stream.
 ///
@@ -21,8 +22,13 @@ class DocumentDetectionService {
   /// Optional callback invoked when an internal error occurs during processing.
   /// Useful for surfacing errors to the UI or logging layer without throwing.
   final void Function(Object error)? onError;
+  
+  final DocumentCameraMessages messages;
 
-  DocumentDetectionService({this.onError});
+  DocumentDetectionService({
+    this.onError,
+    this.messages = const DocumentCameraMessages(),
+  });
 
   late final ObjectDetector _objectDetector;
   bool _isDetectorInitialized = false;
@@ -129,7 +135,7 @@ class DocumentDetectionService {
 
       // If nothing was detected, notify the UI and return early
       if (objects.isEmpty) {
-        onStatusUpdated?.call('No document found');
+        onStatusUpdated?.call(messages.noDocumentFound);
         onDetectedRectUpdated?.call(<Rect>[]);
         onBestDetectedRectUpdated?.call(null);
         return false;
@@ -337,21 +343,21 @@ class DocumentDetectionService {
       final List<String> adjustments = [];
       if (!positionAligned) {
         if (boundingBox.left < cropX) {
-          adjustments.add('Move right');
+          adjustments.add(messages.moveRight);
         }
         if (boundingBox.right > cropX + cropWidth) {
-          adjustments.add('Move left');
+          adjustments.add(messages.moveLeft);
         }
 
         final bool overTop = boundingBox.top < relaxedFrameTop;
         final bool overBottom = boundingBox.bottom > relaxedFrameBottom;
 
         if (overTop && overBottom) {
-          adjustments.add('Document overflows top and bottom');
+          adjustments.add(messages.documentOverflows);
         } else if (overTop) {
-          adjustments.add('Move down');
+          adjustments.add(messages.moveDown);
         } else if (overBottom) {
-          adjustments.add('Move up');
+          adjustments.add(messages.moveUp);
         }
       }
 
@@ -380,6 +386,7 @@ class DocumentDetectionService {
         maxSizeRatio: maxSizeRatio,
         objectArea: objectArea,
         frameArea: frameArea,
+        messages: messages,
       );
 
       return isAligned;
@@ -501,12 +508,13 @@ void _updateDetectionStatus(
   required double maxSizeRatio,
   required double objectArea,
   required double frameArea,
+  required DocumentCameraMessages messages,
 }) {
   if (onStatusUpdated == null) return;
 
   // Document is fully aligned — prompt the user to hold still for capture
   if (isAligned) {
-    onStatusUpdated('Perfect! Hold still to capture.');
+    onStatusUpdated(messages.perfectHoldStill);
     return;
   }
 
@@ -514,9 +522,9 @@ void _updateDetectionStatus(
   String? sizeMessage;
   if (!sizeAligned) {
     if (objectArea < (minSizeRatio * frameArea)) {
-      sizeMessage = 'Move closer'; // Document too small in frame
+      sizeMessage = messages.moveCloser; // Document too small in frame
     } else if (objectArea > (maxSizeRatio * frameArea)) {
-      sizeMessage = 'Move farther away'; // Document too large in frame
+      sizeMessage = messages.moveFartherAway; // Document too large in frame
     }
   }
 
@@ -533,7 +541,7 @@ void _updateDetectionStatus(
     // Example: "Move right, move up"
     message = adjustments.join(', ');
   } else {
-    message = 'Adjust document position';
+    message = messages.adjustDocumentPosition;
   }
 
   onStatusUpdated(message);

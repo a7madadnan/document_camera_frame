@@ -168,6 +168,7 @@ class DocumentCameraOverlayLayer extends StatelessWidget {
             bottomFrameContainerChild: bottomFrameContainerChild,
             bottomHintText: bottomHintText,
             sideInfoOverlay: sideInfoOverlay,
+            messages: logic.messages,
           ),
 
         if (_isFullUi && logic.requireBothSides && showSideIndicator)
@@ -219,6 +220,7 @@ class DocumentCameraOverlayLayer extends StatelessWidget {
             completedColor:
                 sideIndicatorStyle.sideIndicatorCompletedColor ?? Colors.green,
             textStyle: sideIndicatorStyle.sideIndicatorTextStyle,
+            messages: logic.messages,
           ),
 
         // ── Minimal-only elements ──────────────────────────────────────────

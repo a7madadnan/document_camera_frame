@@ -37,6 +37,9 @@ class DocumentCameraFrame extends StatefulWidget {
   /// Instruction text styling configuration
   final DocumentCameraInstructionStyle instructionStyle;
 
+  /// Messages and labels configuration
+  final DocumentCameraMessages messages;
+
   /// Callback triggered when front side is captured.
   final Function(String imgPath)? onFrontCaptured;
 
@@ -144,6 +147,7 @@ class DocumentCameraFrame extends StatefulWidget {
     this.imageQuality = 90,
     this.initialFlashMode = FlashMode.auto,
     this.uiMode = DocumentCameraUIMode.defaultMode,
+    this.messages = const DocumentCameraMessages(),
   });
 
   bool get _isCamScanner => uiMode == DocumentCameraUIMode.camScanner;
@@ -190,8 +194,8 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
   AnimationController? _progressAnimationController;
   Animation<double>? _progressAnimation;
 
-  final ValueNotifier<String> _camScannerLabel = ValueNotifier<String>(
-    'Scan Front Side',
+  late final ValueNotifier<String> _camScannerLabel = ValueNotifier<String>(
+    widget.messages.scanFrontSideInstruction,
   );
 
   @override
@@ -201,7 +205,8 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
     if (widget._isCamScanner) {
       _logic = DocumentCameraLogic(
         context: context,
-        onCameraError: () => widget.onCameraError?.call('Camera error'),
+        messages: widget.messages,
+        onCameraError: () => widget.onCameraError?.call(widget.messages.cameraError),
         onFrontCaptured: widget.onFrontCaptured,
         onBackCaptured: widget.onBackCaptured,
         onDocumentSaved: (data) {
@@ -224,7 +229,8 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
 
     _logic = DocumentCameraLogic(
       context: context,
-      onCameraError: () => widget.onCameraError?.call('Camera error'),
+      messages: widget.messages,
+      onCameraError: () => widget.onCameraError?.call(widget.messages.cameraError),
       onFrontCaptured: widget.onFrontCaptured,
       onBackCaptured: widget.onBackCaptured,
       onDocumentSaved: (data) {
@@ -274,7 +280,7 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
     }
 
     if (widget.requireBothSides) {
-      _camScannerLabel.value = 'Scan Front Side, then tap Save';
+      _camScannerLabel.value = widget.messages.scanFrontSideThenSaveInstruction;
       final frontPaths = await service.scan(maxPages: 2);
       if (!mounted) return;
 
@@ -289,7 +295,7 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
       await Future<void>.delayed(const Duration(milliseconds: 600));
       if (!mounted) return;
 
-      _camScannerLabel.value = 'Scan Back Side, then tap Save';
+      _camScannerLabel.value = widget.messages.scanBackSideThenSaveInstruction;
       final backPaths = await service.scan(maxPages: 2);
       if (!mounted) return;
 
@@ -315,7 +321,7 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
         ),
       );
     } else {
-      _camScannerLabel.value = 'Scan Document, then tap Save';
+      _camScannerLabel.value = widget.messages.scanDocumentThenSaveInstruction;
       final paths = await service.scan(maxPages: 2);
       if (!mounted) return;
 
@@ -382,10 +388,10 @@ class _DocumentCameraFrameState extends State<DocumentCameraFrame>
                 ),
                 if (widget.requireBothSides) ...[
                   const SizedBox(height: 8),
-                  const Text(
-                    'Scan the front, then the back.\nWe will use the last image from each session.',
+                  Text(
+                    widget.messages.scanBothSidesSequenceInstruction,
                     textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.white54, fontSize: 13),
+                    style: const TextStyle(color: Colors.white54, fontSize: 13),
                   ),
                 ],
               ],
