@@ -13,6 +13,7 @@ class SideIndicator extends StatelessWidget {
   final Color? inactiveColor;
   final Color? completedColor;
   final TextStyle? textStyle;
+  final DocumentCameraMessages messages;
 
   const SideIndicator({
     super.key,
@@ -26,6 +27,7 @@ class SideIndicator extends StatelessWidget {
     this.inactiveColor,
     this.completedColor,
     this.textStyle,
+    this.messages = const DocumentCameraMessages(),
   });
 
   @override
@@ -68,7 +70,7 @@ class SideIndicator extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Front',
+                      messages.frontSideLabel,
                       style:
                           textStyle?.copyWith(
                             color: currentSide == DocumentSide.front
@@ -93,7 +95,7 @@ class SideIndicator extends StatelessWidget {
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Back',
+                      messages.backSideLabel,
                       style:
                           textStyle?.copyWith(
                             color: currentSide == DocumentSide.back

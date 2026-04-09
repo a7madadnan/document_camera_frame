@@ -15,6 +15,7 @@ export 'src/models/document_capture_data.dart';
 // Main widget
 export 'src/ui/page/document_camera_frame.dart';
 export 'src/core/document_camera_style.dart';
+export 'src/core/document_camera_messages.dart';
 
 // UI widgets
 export 'src/ui/widgets/action_button.dart';
