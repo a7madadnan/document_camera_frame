@@ -533,7 +533,7 @@ void _updateDetectionStatus(
   String message;
   if (sizeMessage != null && adjustments.isNotEmpty) {
     // Example: "Move closer and move right"
-    message = '$sizeMessage and ${adjustments.join(', ').toLowerCase()}';
+    message = '$sizeMessage${messages.andConnector}${adjustments.join(', ').toLowerCase()}';
   } else if (sizeMessage != null) {
     // Example: "Move closer" or "Move farther away"
     message = sizeMessage;
