@@ -2,11 +2,19 @@ import 'package:flutter/material.dart';
 
 class CameraSwitcher extends StatelessWidget {
   final VoidCallback onTap;
+  final Widget? customSwitcherWidget;
 
-  const CameraSwitcher({super.key, required this.onTap});
+  const CameraSwitcher({super.key, required this.onTap, this.customSwitcherWidget});
 
   @override
   Widget build(BuildContext context) {
+    if (customSwitcherWidget != null) {
+      return GestureDetector(
+        onTap: onTap,
+        child: customSwitcherWidget!,
+      );
+    }
+    
     return GestureDetector(
       onTap: onTap,
       child: Container(

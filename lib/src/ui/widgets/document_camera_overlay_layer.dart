@@ -169,6 +169,8 @@ class DocumentCameraOverlayLayer extends StatelessWidget {
             bottomHintText: bottomHintText,
             sideInfoOverlay: sideInfoOverlay,
             messages: logic.messages,
+            frontWidget: frameStyle.bottomFrameFrontWidget,
+            backWidget: frameStyle.bottomFrameBackWidget,
           ),
 
         if (_isFullUi && logic.requireBothSides && showSideIndicator)
@@ -303,6 +305,7 @@ class DocumentCameraOverlayLayer extends StatelessWidget {
           captureButtonStyle: buttonStyle.captureButtonStyle,
           actionButtonStyle: buttonStyle.actionButtonStyle,
           retakeButtonStyle: buttonStyle.retakeButtonStyle,
+          cameraSwitcherWidget: buttonStyle.cameraSwitcherWidget,
           actionButtonPadding: buttonStyle.actionButtonPadding,
           actionButtonWidth: buttonStyle.actionButtonWidth,
           actionButtonHeight: buttonStyle.actionButtonHeight,
@@ -324,6 +327,7 @@ class DocumentCameraOverlayLayer extends StatelessWidget {
           onCameraSwitched: logic.switchCamera,
           requireBothSides: logic.requireBothSides,
           hideCaptureButton: _hideCaptureButton,
+          messages: logic.messages,
         ),
       ],
     );
