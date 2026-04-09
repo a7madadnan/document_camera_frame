@@ -26,6 +26,7 @@ class TwoSidedActionButtons extends StatelessWidget {
   final ButtonStyle? captureButtonStyle;
   final ButtonStyle? actionButtonStyle;
   final ButtonStyle? retakeButtonStyle;
+  final Widget? cameraSwitcherWidget;
 
   // Button dimensions
   final double? actionButtonWidth;
@@ -67,6 +68,7 @@ class TwoSidedActionButtons extends StatelessWidget {
   /// All post-capture action buttons (Next, Previous, Use photo, Retake) remain.
   /// Used by kiosk mode where auto-capture fires and no manual trigger is needed.
   final bool hideCaptureButton;
+  final DocumentCameraMessages messages;
 
   const TwoSidedActionButtons({
     super.key,
@@ -88,6 +90,7 @@ class TwoSidedActionButtons extends StatelessWidget {
     this.captureButtonStyle,
     this.actionButtonStyle,
     this.retakeButtonStyle,
+    this.cameraSwitcherWidget,
     this.actionButtonWidth,
     this.actionButtonHeight,
     this.captureButtonWidth,
@@ -108,6 +111,7 @@ class TwoSidedActionButtons extends StatelessWidget {
     required this.onCameraSwitched,
     this.requireBothSides = true,
     this.hideCaptureButton = false,
+    this.messages = const DocumentCameraMessages(),
   });
 
   void _retakeImage() {
@@ -317,7 +321,10 @@ class TwoSidedActionButtons extends StatelessWidget {
                                 ),
 
                                 // Camera Switch Button
-                                CameraSwitcher(onTap: onCameraSwitched),
+                                CameraSwitcher(
+                                  onTap: onCameraSwitched,
+                                  customSwitcherWidget: cameraSwitcherWidget,
+                                ),
                               ],
                             ),
                           ),

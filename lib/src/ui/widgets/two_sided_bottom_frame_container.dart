@@ -17,6 +17,8 @@ class TwoSidedBottomFrameContainer extends StatelessWidget {
   final String? bottomHintText;
   final Widget? sideInfoOverlay;
   final DocumentCameraMessages messages;
+  final Widget? frontWidget;
+  final Widget? backWidget;
 
   const TwoSidedBottomFrameContainer({
     super.key,
@@ -29,6 +31,8 @@ class TwoSidedBottomFrameContainer extends StatelessWidget {
     this.bottomHintText,
     this.sideInfoOverlay,
     this.messages = const DocumentCameraMessages(),
+    this.frontWidget,
+    this.backWidget,
   });
 
   @override
@@ -54,9 +58,9 @@ class TwoSidedBottomFrameContainer extends StatelessWidget {
                 builder: (context, side, _) {
                   final isFront = side == DocumentSide.front;
                   final label = isFront ? messages.frontSideLabel : messages.backSideLabel;
-                  final icon = isFront
-                      ? Icons.credit_card_outlined
-                      : Icons.credit_card;
+                  final Widget iconWidget = isFront
+                      ? (frontWidget ?? const Icon(Icons.credit_card_outlined, color: Colors.black54, size: 24))
+                      : (backWidget ?? const Icon(Icons.credit_card, color: Colors.black54, size: 24));
 
                   final data = documentDataNotifier.value;
                   final imagePath = isFront
@@ -70,7 +74,7 @@ class TwoSidedBottomFrameContainer extends StatelessWidget {
                       Expanded(
                         child: Row(
                           children: [
-                            Icon(icon, color: Colors.black54, size: 24),
+                            iconWidget,
                             const SizedBox(width: 8),
                             Text(
                               label,

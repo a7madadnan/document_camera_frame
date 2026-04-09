@@ -37,10 +37,18 @@ class DocumentCameraFrameStyle {
   /// Border for the displayed frame (optional).
   final BoxBorder? frameBorder;
 
+  /// Custom widget for the front side in the bottom frame container.
+  final Widget? bottomFrameFrontWidget;
+
+  /// Custom widget for the back side in the bottom frame container.
+  final Widget? bottomFrameBackWidget;
+
   const DocumentCameraFrameStyle({
     this.outerFrameBorderRadius = 12,
     this.innerCornerBorderRadius = 8,
     this.frameBorder,
+    this.bottomFrameFrontWidget,
+    this.bottomFrameBackWidget,
   });
 }
 
@@ -115,6 +123,9 @@ class DocumentCameraButtonStyle {
   /// Text style for the retake button (optional).
   final TextStyle? retakeButtonTextStyle;
 
+  /// Custom widget for the camera switcher button (optional).
+  final Widget? cameraSwitcherWidget;
+
   const DocumentCameraButtonStyle({
     this.captureOuterCircleRadius,
     this.captureInnerCircleRadius,
@@ -139,6 +150,7 @@ class DocumentCameraButtonStyle {
     this.captureButtonTextStyle,
     this.actionButtonTextStyle,
     this.retakeButtonTextStyle,
+    this.cameraSwitcherWidget,
   });
 }
 
